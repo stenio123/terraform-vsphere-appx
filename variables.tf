@@ -39,6 +39,10 @@ variable "attributeValue" {
   default = "yes"
 }
 
+variable "prefix" {
+  description = "Prefix value"
+  default = "demo-"
+}
 // VM Name
 variable "tagCategory" {
   description = "The Tag Category Name"
