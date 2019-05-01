@@ -4,26 +4,26 @@ provider "vsphere" {
 }
 
 data "vsphere_virtual_machine" "template" {
-  name          = "Ubuntu"
+  name          = "${var.vsphere_virtual_machine_template}"
   datacenter_id = "${data.vsphere_datacenter.dc.id}"
 }
 
 data "vsphere_datacenter" "dc" {
-  name = "PacketDatacenter"
+  name = "${var.vsphere_datacenter}"
 }
 
 data "vsphere_datastore" "datastore" {
-  name          = "datastore1"
+  name          = "${var.vsphere_datastore}"
   datacenter_id = "${data.vsphere_datacenter.dc.id}"
 }
 
 data "vsphere_compute_cluster" "cluster" {
-  name          = "MainCluster"
+  name          = "${var.vsphere_compute_cluster}"
   datacenter_id = "${data.vsphere_datacenter.dc.id}"
 }
 
 data "vsphere_network" "network" {
-  name          = "VM Network"
+  name          = "${var.vsphere_network}"
   datacenter_id = "${data.vsphere_datacenter.dc.id}"
 }
 
@@ -82,7 +82,7 @@ resource "vsphere_virtual_machine" "vm" {
     network_id = "${data.vsphere_network.network.id}"
   }
 
-  tags = ["${data.vsphere_tag.tag1.id}"]
+  tags = ["${vsphere_tag.tag.id}"]
 
   disk {
     label            = "disk0"
