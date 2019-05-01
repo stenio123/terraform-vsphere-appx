@@ -27,9 +27,49 @@ data "vsphere_network" "network" {
   datacenter_id = "${data.vsphere_datacenter.dc.id}"
 }
 
+// Folders and tags
+// Create Folder
+resource "vsphere_folder" "folder" {
+  path          = "${var.prefix}${var.vmfolder}"
+  type          = "vm"
+  datacenter_id = "${data.vsphere_datacenter.dc.id}"
+  tags          = ["${vsphere_tag.tag.id}"]
+
+  //custom_attributes = "${map(vsphere_custom_attribute.attribute.id, "${var.attributeValue}")}"
+}
+
+// Apply attribute to the folder
+// https://www.terraform.io/docs/providers/vsphere/r/custom_attribute.html
+resource "vsphere_custom_attribute" "attribute" {
+  name                = "${var.prefix}${var.attribute}"
+  managed_object_type = "Folder"
+}
+
+// vSphere Tag Category (SINGLE or MULTIPLE)
+resource "vsphere_tag_category" "category" {
+  name        = "${var.tagCategory}"
+  description = "Managed by Terraform"
+  cardinality = "MULTIPLE"
+
+  // The types of objects this tag can be associated with.
+  associable_types = [
+    "VirtualMachine",
+    "Folder",
+  ]
+}
+
+// vSphere Tag
+resource "vsphere_tag" "tag" {
+  name        = "${var.tag}"
+  category_id = "${vsphere_tag_category.category.id}"
+  description = "Managed by Terraform"
+}
+// Vms
+
 resource "vsphere_virtual_machine" "vm" {
   name                        = "${var.vm_name}_${count.index + 1}"
   resource_pool_id            = "${data.vsphere_compute_cluster.cluster.resource_pool_id}"
+  folder                      = "${vsphere_folder.folder.path}"
   datastore_id                = "${data.vsphere_datastore.datastore.id}"
   count                       = "${var.vm_count}"
   num_cpus                    = "${var.cpu_count}"

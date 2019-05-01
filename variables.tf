@@ -15,8 +15,38 @@ variable "memory" {
 }
 variable "vm_count" {
 	description = "Number of VMs to create for this application"
+	default = "1"
 }
 variable "tag_name" {
 	description = "Tag to include, values can be Production or Staging"
 	default = "Staging"
+}
+
+variable "vmfolder" {
+	description = "Folder to store VM"
+	default = "Stenio-demo"
+}
+
+// Attribute Name 
+variable "attribute" {
+  description = "The attribute Name"
+  default = "fromTerraform"
+}
+
+// Attribute Name 
+variable "attributeValue" {
+  description = "The attribute value"
+  default = "yes"
+}
+
+// VM Name
+variable "tagCategory" {
+  description = "The Tag Category Name"
+  default = "Customer"
+}
+
+// VM Name prefix 
+variable "tag" {
+  description = "The Tag Name"
+  default ="Stenio"
 }
