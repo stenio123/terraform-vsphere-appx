@@ -33,7 +33,7 @@ variable "memory" {
 }
 variable "vm_count" {
 	description = "Number of VMs to create for this application"
-	default = "3"
+	default = "1"
 }
 
 variable "vmfolder" {
